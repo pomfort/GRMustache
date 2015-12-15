@@ -502,6 +502,12 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         NSString *relativePath = [baseTemplateID stringByDeletingLastPathComponent];
         relativePath = [relativePath stringByReplacingOccurrencesOfString:_bundle.resourcePath withString:@""];
         
+        //10.9 seems not to allow paths for the name of the resource, so we add all the leading path components to the directory value
+        if ([[name pathComponents] count] > 1) {
+            relativePath = [relativePath stringByAppendingPathComponent:[name stringByDeletingLastPathComponent]];
+            name = [name lastPathComponent];
+        }
+        
         return [_bundle pathForResource:name ofType:_templateExtension inDirectory:relativePath];
     } else {
         return [_bundle pathForResource:name ofType:_templateExtension];
